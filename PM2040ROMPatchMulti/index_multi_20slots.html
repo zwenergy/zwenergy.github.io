@@ -66,22 +66,22 @@ function patchArea( uf2bytearray, uf2Offset, patchArray, len ) {
   // Patches.
   const sleepPatchData = {
   // Game Code [ address, old val, new val ]
-    "MTAJ" : [ 0x2A40, 0x42, 0x48 ],
-    "MRCJ" : [ 0x2673, 0x42, 0x48 ],
-    "MSDJ" : [ 0x2A88, 0x42, 0x48 ],
-    "MBRJ" : [ 0x419A, 0x42, 0x48 ],
-    "MTAE" : [ 0x2673, 0x42, 0x48 ],
-    "MRCE" : [ 0x2673, 0x42, 0x48 ],
-    "MSDE" : [ 0x2A88, 0x42, 0x48 ],
-    "MBRE" : [ 0x419A, 0x42, 0x48 ],
-    "MSTP" : [ 0x4B18, 0x42, 0x48 ], 
-    "MSTJ" : [ 0x4AE3, 0x42, 0x48 ],
-    "MACD" : [ 0x4CB7, 0x42, 0x48 ],
-    "MACE" : [ 0x4CB7, 0x42, 0x48 ],
-    "MACF" : [ 0x4CB7, 0x42, 0x48 ],
-    "MACJ" : [ 0x4CB7, 0x42, 0x48 ],
-    "MLTE" : [ 0x4B18, 0x42, 0x48 ],
-    "MLTJ" : [ 0x4B18, 0x42, 0x48 ]
+    "MTAJ" : [ [ 0x2A40, 0x42, 0x48 ] ],
+    "MRCJ" : [ [ 0x2673, 0x42, 0x48 ] ],
+    "MSDJ" : [ [ 0x2A88, 0x42, 0x48 ], [ 0x2B6B, 0x44, 0x48 ] ],
+    "MBRJ" : [ [ 0x419A, 0x42, 0x48 ] ],
+    "MTAE" : [ [ 0x2673, 0x42, 0x48 ] ],
+    "MRCE" : [ [ 0x2673, 0x42, 0x48 ] ],
+    "MSDE" : [ [ 0x2A88, 0x42, 0x48 ], [ 0x2B6B, 0x44, 0x48 ] ],
+    "MBRE" : [ [ 0x419A, 0x42, 0x48 ] ],
+    "MSTP" : [ [ 0x4B18, 0x42, 0x48 ] ], 
+    "MSTJ" : [ [ 0x4AE3, 0x42, 0x48 ] ],
+    "MACD" : [ [ 0x4CB7, 0x42, 0x48 ] ],
+    "MACE" : [ [ 0x4CB7, 0x42, 0x48 ] ],
+    "MACF" : [ [ 0x4CB7, 0x42, 0x48 ] ],
+    "MACJ" : [ [ 0x4CB7, 0x42, 0x48 ] ],
+    "MLTE" : [ [ 0x4B18, 0x42, 0x48 ] ],
+    "MLTJ" : [ [ 0x4B18, 0x42, 0x48 ] ]
   }
     
   // Attempt sleep patching?
@@ -99,11 +99,14 @@ function patchArea( uf2bytearray, uf2Offset, patchArray, len ) {
     if ( curGameCode in sleepPatchData ) {
       console.log( "Patch data found!" )
       
-      // Do patching in.
-      if ( romarray[ sleepPatchData[ curGameCode ][ 0 ] ] == sleepPatchData[ curGameCode ][ 1 ] ) {
-        // Old value fits.
-        console.log(  "Old value fits. Do patching" );
-        patchArray[ sleepPatchData[ curGameCode ][ 0 ] ] = sleepPatchData[ curGameCode ][ 2 ];
+      // Go over patches.
+      for ( let p = 0; p < sleepPatchData[ curGameCode ].length; ++p ) {
+        // Do patching in.
+        if ( patchArray[ sleepPatchData[ curGameCode ][ p ][ 0 ] ] == sleepPatchData[ curGameCode ][ p ][ 1 ] ) {
+          // Old value fits.
+          console.log(  "Old value fits. Do patching" );
+          patchArray[ sleepPatchData[ curGameCode ][ p ][ 0 ] ] = sleepPatchData[ curGameCode ][ p ][ 2 ];
+        }
       }
     }
   }
